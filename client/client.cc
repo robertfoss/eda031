@@ -2,9 +2,13 @@
 
 #include "../clientserver/connection.h"
 #include "../clientserver/connectionclosedexception.h"
+#include "stringCmd.h"
+#include "../clientserver/protocol.h"
 
 #include <iostream>
 #include <string>
+#include <algorithm>
+#include <map>
 #include <cstdlib>    /* for exit() and atoi() */
 
 using namespace std;
@@ -35,6 +39,19 @@ string readString(Connection& conn) {
     return s;
 }
 
+int getCommand(string& cmd, StringCmd& scmd){
+	return scmd.getCommand(cmd);
+}
+
+void printHelp(StringCmd& scmd){
+	map<std::string,int>::reverse_iterator it;
+	it = scmd.commands.rbegin();
+	cout << "Please use one of the following commands:" << endl;
+	while(it != scmd.commands.rend()){
+		cout << it->first << endl;
+		++it;
+	}
+}
 
 int main(int argc, char* argv[]) {
     if (argc != 3) {
@@ -42,15 +59,37 @@ int main(int argc, char* argv[]) {
         exit(1);
     }
     
+
     Connection conn(argv[1], atoi(argv[2]));
     if (! conn.isConnected()) {
         cerr << "Connection attempt failed" << endl;
         exit(1);
     }
     
-    cout << "Type a number: ";
+    cout << "Type a command or help to list all commands: ";
     int nbr;
-    while (cin >> nbr) {
+	string cmd;
+	StringCmd scmd;
+    while (getline(cin,cmd)) {
+		
+		// translate every char to lowercase.
+		transform(cmd.begin(), cmd.end(), cmd.begin(), ::tolower);
+
+	
+		nbr = getCommand(cmd, scmd);
+		
+		if(nbr > 0){
+
+			// Do stuff
+
+
+		}else if(nbr == 0){
+			printHelp(scmd);
+		}else if(nbr == -1){
+			cout << "Good bye!" << endl;
+			exit(0);
+		}
+/*
         try {
             writeNumber(nbr, conn);
             string answer = readString(conn);
@@ -61,6 +100,9 @@ int main(int argc, char* argv[]) {
             cerr << "Server closed down!" << endl;
             exit(1);
         }
+*/
     }
 }
+
+
 
