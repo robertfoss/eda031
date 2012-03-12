@@ -1,0 +1,9 @@
+Usenet News is an old (started in 1979) system for sharing information over the net. News is
+distributed in the form of “articles” that are posted to “newsgroups”. Articles are distributed to
+news servers, and a user can hook up to a news server and read articles, and also post articles in
+newsgroups and create new newsgroups. The user runs a news client which uses the NNTP1
+protocol to communicate with the server.
+In this project, you shall develop your own news system, consisting of a news server and
+a news client. Both programs shall be written in C++. The server is dedicated and does not
+share news with other servers. Instead of NNTP, you will use the communication protocol that is
+defined in section 6.
