@@ -2,3 +2,4 @@
 *.d*
 myserver
 myclient
+client/client
