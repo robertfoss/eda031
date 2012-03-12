@@ -12,9 +12,11 @@
 #include <cstdlib>    /* for exit() and atoi() */
 
 using namespace std;
+using namespace protocol;
 using client_server::Connection;
 using client_server::ConnectionClosedException;
 
+StringCmd scmd;
 
 /*
  * Send the integer 'value' to the server.
@@ -39,17 +41,46 @@ string readString(Connection& conn) {
     return s;
 }
 
-int getCommand(string& cmd, StringCmd& scmd){
+int getCommand(string& cmd){
 	return scmd.getCommand(cmd);
 }
 
-void printHelp(StringCmd& scmd){
+void printHelp(){
 	map<std::string,int>::reverse_iterator it;
 	it = scmd.commands.rbegin();
 	cout << "Please use one of the following commands:" << endl;
 	while(it != scmd.commands.rend()){
 		cout << it->first << endl;
 		++it;
+	}
+}
+
+// TODO: Add COM_END and paramaters according to chap.6
+void sendCommand(int nbr, Connection& conn){
+	cout << "sending.. " << nbr << endl;
+	switch(nbr){
+		case Protocol::COM_LIST_NG:			
+			conn.write(Protocol::COM_LIST_NG);
+			break;
+		case Protocol::COM_CREATE_NG:			
+			conn.write(Protocol::COM_CREATE_NG;
+			break;
+		case Protocol::COM_DELETE_NG:			
+			conn.write(Protocol::COM_DELETE_NG);
+			break;
+		case Protocol::COM_LIST_ART:			
+			conn.write(Protocol::COM_LIST_ART);
+			break;
+		case Protocol::COM_CREATE_ART:			
+			conn.write(Protocol::COM_CREATE_ART);
+			break;
+		case Protocol::COM_DELETE_ART:			
+			conn.write(Protocol::COM_DELETE_ART);
+			break;
+		case Protocol::COM_GET_ART:			
+			conn.write(Protocol::COM_GET_ART);
+			break;
+
 	}
 }
 
@@ -69,23 +100,27 @@ int main(int argc, char* argv[]) {
     cout << "Type a command or help to list all commands: ";
     int nbr;
 	string cmd;
-	StringCmd scmd;
+	
     while (getline(cin,cmd)) {
 		
 		// translate every char to lowercase.
 		transform(cmd.begin(), cmd.end(), cmd.begin(), ::tolower);
 
 	
-		nbr = getCommand(cmd, scmd);
+		nbr = getCommand(cmd);
 		
 		if(nbr > 0){
+			
 
+			sendCommand(nbr, conn);
+
+//			getAnswer() // ANS_ACK -> ok! ANS_NAK -> Error
 			// Do stuff
 
 
-		}else if(nbr == 0){
-			printHelp(scmd);
-		}else if(nbr == -1){
+		}else if(nbr == Protocol::COM_HELP){
+			printHelp();
+		}else if(nbr == Protocol::COM_EXIT){
 			cout << "Good bye!" << endl;
 			exit(0);
 		}

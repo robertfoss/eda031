@@ -1,0 +1,5 @@
+*.o
+*.d*
+myserver
+myclient
+client/client

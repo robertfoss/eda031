@@ -22,7 +22,6 @@ class StringCmd {
 			commands["create article"] = protocol::Protocol::COM_CREATE_ART;	
 			commands["delete article"] = protocol::Protocol::COM_DELETE_ART;	
 			commands["get article"] = protocol::Protocol::COM_GET_ART;	
-			commands["command end"] = protocol::Protocol::COM_END;	
 		}
 
 		int getCommand(std::string& cmd){	
