@@ -2,14 +2,17 @@
 
 #include "connection.h"
 #include "connectionclosedexception.h"
+#include "../protocol.h"
 
 #include <iostream>
 #include <string>
 #include <cstdlib>    /* for exit() and atoi() */
+#include <sstream>
 
 using namespace std;
 using client_server::Connection;
 using client_server::ConnectionClosedException;
+using protocol::Protocol;
 
 
 /*
@@ -28,9 +31,8 @@ void writeNumber(int value, Connection& conn) {
 string readString(Connection& conn) {
     string s;
     char ch;
-    while ((ch = conn.read()) != '$')  // '$' is end of string
-        s += ch;
-    return s;
+    while ((ch = conn.read()) != Protocol::ANS_END) s += ch;
+    return (s += ch);
 }
 
 int main(int argc, char* argv[]) {
@@ -50,8 +52,9 @@ int main(int argc, char* argv[]) {
     while (cin >> nbr) {
         try {
             writeNumber(nbr, conn);
-            string answer = readString(conn);
-            cout << nbr << " is " << answer << endl;
+			stringstream ss(stringstream::in | stringstream::out);
+			ss << readString(conn);
+            cout << ss.str() << endl;
             cout << "Type another number: ";
         } 
         catch (ConnectionClosedException&) {

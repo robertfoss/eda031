@@ -96,7 +96,6 @@ namespace client_server {
     bool Connection::isConnected() const {
         return my_socket != -1;
     }
-    
     void Connection::write(unsigned char ch) const 
     throw(ConnectionClosedException) {
         if (my_socket == -1)
