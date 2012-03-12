@@ -28,10 +28,10 @@ LDLIBS	 = -lclientserver
 #LDLIBS	+= -lnsl
 
 # Define source files
-SRC	= $(wildcard *.cc)
+SRC	= $(wildcard *.cc) 
 
 # Targets
-PROGS	= myserver myclient
+PROGS	= client
 
 # Phony targets
 .PHONY: all clean cleaner
@@ -40,10 +40,8 @@ all: $(PROGS)
 
 # Targets rely on implicit rules for compiling and linking.
 # The dependency on libclientserver.a is not defined.
-myserver: myserver.o  ../connection.o ../server.o
-	$(CXX) -o $@ $^
-
-myclient: myclient.o ../connection.o
+# myserver: myserver.o  
+client: client.o ../clientserver/connection.o
 	$(CXX) -o $@ $^
 
 # Standard clean and cleaner
