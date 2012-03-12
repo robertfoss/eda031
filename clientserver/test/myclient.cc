@@ -26,6 +26,22 @@ void writeNumber(int value, Connection& conn) {
 }
 
 /*
+ * Send one byte constant.
+ */
+void writeConst(int value, Connection& conn) {
+    conn.write(value & 0xFF);
+}
+
+/*
+ * Send one byte constant.
+ */
+void writeString(const string& str, Connection& conn) {
+	for(size_t i = 0; i < str.size(); ++i)
+    	conn.write(str[i]);
+}
+
+
+/*
  * Read a string from the server.
  */
 string readString(Connection& conn) {
@@ -47,11 +63,26 @@ int main(int argc, char* argv[]) {
         exit(1);
     }
     
-    cout << "Type a number: ";
     int nbr;
-    while (cin >> nbr) {
+    while (true) {
+    	cout << "Type a command [2 40 3 hej]: ";
         try {
+			//istringstream iss(cin);
+			cin >> nbr;
+			cout << "\"" << nbr << "\"" << endl;
             writeNumber(nbr, conn);
+			cin >> nbr;
+			cout << "\"" << nbr << "\"" << endl;
+			writeConst(nbr, conn);
+			cin >> nbr;
+			cout << "\"" << nbr << "\"" << endl;
+            writeNumber(nbr, conn);
+
+			string str;
+			cin >> str;
+			cout << str << endl;
+			
+
 			stringstream ss(stringstream::in | stringstream::out);
 			ss << readString(conn);
             cout << ss.str() << endl;

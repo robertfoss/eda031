@@ -28,23 +28,18 @@ throw(ConnectionClosedException) {
 /*
  * Read a string from the server.
  */
-string readString(Connection& conn) throw (InvalidStringException) {
+string readString(Connection* conn) throw (InvalidStringException) {
     string s;
-	bool started = false;
     char ch;
-	char prev_ch;
-    while ((ch = conn.read()) != Protocol::ANS_END) {
-
-		if (ch == '"' && prev_ch != '\\' && started) {
-			return s;
+	if((ch = conn->read()) == Protocol::PAR_STRING){
+		int n = readNumber(conn);
+		if( n < 0){
+			throw InvalidStringException();
 		}
-
-		if (started) s += ch;
-
-		if (ch == '"' && !started) {
-			started = true;
+		for(int i = 0; i < n; ++i){
+			s += conn->read();
 		}
-		prev_ch = ch;
+		return s;
 	}
     throw InvalidStringException();
 }
@@ -68,13 +63,10 @@ void wtf(Connection* conn, int nbr) throw (ConnectionClosedException){
 void com_list_ng(Connection* conn){
 	conn = conn;
 	cout << "Listing newsgroups.. " << endl;
-
-	
 }
 void com_create_ng(Connection* conn){
-	conn = conn;
-	//, string ng
-	//cout << "Creating newsgroup: " << ng << endl;
+	string ng = readString(conn);
+	cout << "Creating newsgroup: " << ng << endl;
 }
 void com_del_ng(Connection* conn){
 	conn = conn;
