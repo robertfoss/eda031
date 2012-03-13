@@ -29,13 +29,14 @@ void writeNumber(int value, Connection& conn) {
  * Send one byte constant.
  */
 void writeConst(int value, Connection& conn) {
-    conn.write(value & 0xFF);
+    conn.write((value & 0xFF));
 }
 
 /*
  * Send one byte constant.
  */
 void writeString(const string& str, Connection& conn) {
+	writeNumber(str.size(), conn);
 	for(size_t i = 0; i < str.size(); ++i)
     	conn.write(str[i]);
 }
@@ -65,23 +66,25 @@ int main(int argc, char* argv[]) {
     
     int nbr;
     while (true) {
-    	cout << "Type a command [2 40 3 hej]: ";
+    	cout << "Type a command [2 40 3 hej 8]: ";
         try {
 			//istringstream iss(cin);
 			cin >> nbr;
 			cout << "\"" << nbr << "\"" << endl;
-            writeNumber(nbr, conn);
+            writeConst(nbr, conn);
+
 			cin >> nbr;
 			cout << "\"" << nbr << "\"" << endl;
 			writeConst(nbr, conn);
-			cin >> nbr;
-			cout << "\"" << nbr << "\"" << endl;
-            writeNumber(nbr, conn);
 
 			string str;
 			cin >> str;
-			cout << str << endl;
-			
+			cout << "\"" << str << "\"" << endl;
+			writeString(str, conn);
+
+			cin >> nbr;
+			cout << "\"" << nbr << "\"" << endl;
+			writeConst(nbr, conn);
 
 			stringstream ss(stringstream::in | stringstream::out);
 			ss << readString(conn);

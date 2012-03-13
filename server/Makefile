@@ -28,6 +28,7 @@ clean:
 
 cleaner: clean
 	$(RM) server
+	$(RM) *.d*
 
 %.d: %.cc
 	@set -e; rm -f $@; \
