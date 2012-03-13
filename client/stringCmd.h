@@ -24,8 +24,12 @@ class StringCmd {
 			commands["get article"] = protocol::Protocol::COM_GET_ART;	
 		}
 
-		int getCommand(std::string& cmd){	
-				return commands[cmd];			
+		int getCommand(std::string& cmd){
+			if(commands.count(cmd) == 1){	
+				return commands[cmd];
+			}else{
+				return protocol::Protocol::COM_HELP;
+			}			
 		}
 
 			
