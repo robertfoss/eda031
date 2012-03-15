@@ -27,11 +27,19 @@ throw(ConnectionClosedException) {
 
 unsigned int readSize(Connection* conn)
 throw(ConnectionClosedException) {
-    unsigned char byte1 = conn->read();
-    unsigned char byte2 = conn->read();
-    unsigned char byte3 = conn->read();
-    unsigned char byte4 = conn->read();
-    return (byte1 << 24) | (byte2 << 16) | (byte3 << 8) | byte4;
+
+	// Must read PAR_NUM before parsing number
+	// Mvh: Ande & Dennis
+	char ch;
+	if((ch = conn->read()) == Protocol::PAR_NUM){
+		unsigned char byte1 = conn->read();
+		unsigned char byte2 = conn->read();
+		unsigned char byte3 = conn->read();
+		unsigned char byte4 = conn->read();
+		return (byte1 << 24) | (byte2 << 16) | (byte3 << 8) | byte4;
+	}
+	// Fel format på PAR_NUM -> Skäll på någon
+	throw ConnectionClosedException();
 }
 
 int readConst(Connection* conn)
@@ -129,7 +137,7 @@ void com_list_art(Connection* conn){
 
 	readConst(conn); // Read COM_END
 
-	writeConst(*conn, Protocol::ANS_LIST_NG);
+	writeConst(*conn, Protocol::ANS_LIST_ART);
 	writeConst(*conn, Protocol::ANS_NAK); // [ANS_ACK  num_p(PAR_NUM!!"#!"#) [num_p(id) string_p(title)]* | ANS_NAK & ERR_NG_DOES_NOT_EXIST]
 	writeConst(*conn, Protocol::ERR_NG_DOES_NOT_EXIST);
 	writeConst(*conn, Protocol::ANS_END);
