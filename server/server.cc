@@ -27,19 +27,11 @@ throw(ConnectionClosedException) {
 
 unsigned int readSize(Connection* conn)
 throw(ConnectionClosedException) {
-
-	// Must read PAR_NUM before parsing number
-	// Mvh: Ande & Dennis
-	char ch;
-	if((ch = conn->read()) == Protocol::PAR_NUM){
 		unsigned char byte1 = conn->read();
 		unsigned char byte2 = conn->read();
 		unsigned char byte3 = conn->read();
 		unsigned char byte4 = conn->read();
 		return (byte1 << 24) | (byte2 << 16) | (byte3 << 8) | byte4;
-	}
-	// Fel format på PAR_NUM -> Skäll på någon
-	throw ConnectionClosedException();
 }
 
 int readConst(Connection* conn)
@@ -121,6 +113,7 @@ void com_create_ng(Connection* conn){
 	writeConst(*conn, Protocol::ANS_END);
 }
 void com_del_ng(Connection* conn){
+	readConst(conn); // READ PAR_NUM
 	unsigned int ngrp = readSize(conn);
 	cout << "Deleting newsgroup: " << ngrp << endl;
 
@@ -132,6 +125,7 @@ void com_del_ng(Connection* conn){
 	writeConst(*conn, Protocol::ANS_END);
 }
 void com_list_art(Connection* conn){
+	readConst(conn); // READ PAR_NUM
 	unsigned int ngrp = readSize(conn);
 	cout << "Listing articles.. " << ngrp << endl;
 
@@ -143,6 +137,7 @@ void com_list_art(Connection* conn){
 	writeConst(*conn, Protocol::ANS_END);
 }
 void com_create_art(Connection* conn){
+	readConst(conn); // READ PAR_NUM
 	unsigned int ngrp = readSize(conn);
 	string title = readString(conn);
 	string auth = readString(conn);
@@ -156,19 +151,23 @@ void com_create_art(Connection* conn){
 	writeConst(*conn, Protocol::ANS_END);
 }
 void com_del_art(Connection* conn){
+	readConst(conn); // READ PAR_NUM
 	unsigned int ngrp = readSize(conn);
+	readConst(conn); // READ PAR_NUM
 	unsigned int nart = readSize(conn);
 	cout << "Deleting article: " << nart << " from group " << ngrp << endl;
 
 	readConst(conn); // Read COM_END
 
-	writeConst(*conn, Protocol::ANS_CREATE_ART);
+	writeConst(*conn, Protocol::ANS_DELETE_ART);
 	writeConst(*conn, Protocol::ANS_ACK); // [ANS_ACK | ANS_NAK [ ERR_NG_DOES_NOT_EXIST | ERR_ART_DOES_NOT_EXIST ] ]
 	writeConst(*conn, Protocol::ANS_END);
 	
 }
 void com_get_art(Connection* conn){
+	readConst(conn); // READ PAR_NUM
 	unsigned int ngrp = readSize(conn);
+	readConst(conn); // READ PAR_NUM
 	unsigned int nart = readSize(conn);
 	cout << "Getting article: " << nart << " from group " << ngrp << endl;
 
