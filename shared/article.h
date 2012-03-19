@@ -4,6 +4,7 @@
 #include <string>
 #include <sstream>
 
+namespace data{
 class Article {
 	friend class Data;
 	friend class Ng;
@@ -23,5 +24,5 @@ private:
 	std::string auth;
 	std::string text;
 };
-
+}
 #endif

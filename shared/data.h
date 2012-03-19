@@ -2,8 +2,8 @@
 #define DATA_H
 
 #include <string>
-//#include <map>
 #include "ng.h"
+namespace data{
 
 class Data {
 typedef unsigned int id_type;
@@ -22,5 +22,6 @@ private:
 	std::map<id_type, Ng> ngs;
 };
 
+}
 
 #endif

@@ -4,6 +4,7 @@
 #include "../clientserver/connection.h"
 #include "../clientserver/connectionclosedexception.h"
 #include "../clientserver/invalidstringexception.h"
+#include "../shared/data.h"
 #include <iostream>
 #include <string>
 #include <cstdlib>
@@ -14,6 +15,9 @@ using client_server::Connection;
 using client_server::ConnectionClosedException;
 using protocol::Protocol;
 using client_server::InvalidStringException;
+using data::Data;
+using data::Ng;
+using data::Article;
 typedef unsigned int uint;
 
 int readNumber(Connection* conn)
@@ -73,7 +77,6 @@ void writeConst(Connection& conn, int value) throw(ConnectionClosedException) {
 	cout << "writeConst: " << (value & 0xFF) << endl;
 }
 
-
 /** Write string an corresponding string length N before. */
 void writeString(Connection& conn, const string& s) throw(ConnectionClosedException) {
 	writeNumber(conn, s.size());
@@ -83,7 +86,6 @@ void writeString(Connection& conn, const string& s) throw(ConnectionClosedExcept
     conn.write(Protocol::ANS_END);
 }
 
-
 void wtf(Connection* conn, int nbr) throw (ConnectionClosedException){
 	cout << "Retarded message received.." << endl;
 	stringstream ss(stringstream::in | stringstream::out);
@@ -92,16 +94,24 @@ void wtf(Connection* conn, int nbr) throw (ConnectionClosedException){
 	throw ConnectionClosedException();
 }
 
+/*List newsgroups. The reply contains the number of newsgroups followed by the identification
+numbers and titles of the groups.
+COM_LIST_NG COM_END
+ANS_LIST_NG num_p [num_p string_p]* ANS_END*/
 
-void com_list_ng(Connection* conn){
+void com_list_ng(Connection* conn, Data* data){
 	cout << "Listing newsgroups.. " << endl;
 	readConst(conn); // Read COM_END
-
 	writeConst(*conn, Protocol::ANS_LIST_NG);
 	writeConst(*conn, Protocol::PAR_NUM);
-	writeNumber(*conn, 0); // Nbr of newsgroups we're sending.
+
+	map<unsigned int, Ng> ngs = data->allNgs();
+	size_t n_ngs = ngs.size();
+
+	writeNumber(*conn, n_ngs); // Nbr of newsgroups we're sending.
 	writeConst(*conn, Protocol::ANS_END);
 }
+
 void com_create_ng(Connection* conn){
 	string ng = readString(conn);
 	cout << "Creating newsgroup: " << ng << endl;
@@ -112,6 +122,7 @@ void com_create_ng(Connection* conn){
 	writeConst(*conn, Protocol::ANS_ACK); // [ACK | (NACK & ERR_NG_ALREADY_EXISTS)] If group was created
 	writeConst(*conn, Protocol::ANS_END);
 }
+
 void com_del_ng(Connection* conn){
 	readConst(conn); // READ PAR_NUM
 	unsigned int ngrp = readSize(conn);
@@ -136,6 +147,7 @@ void com_list_art(Connection* conn){
 	writeConst(*conn, Protocol::ERR_NG_DOES_NOT_EXIST);
 	writeConst(*conn, Protocol::ANS_END);
 }
+
 void com_create_art(Connection* conn){
 	readConst(conn); // READ PAR_NUM
 	unsigned int ngrp = readSize(conn);
@@ -150,6 +162,7 @@ void com_create_art(Connection* conn){
 	writeConst(*conn, Protocol::ANS_ACK); // [ANS_ACK | ANS_NAK & ERR_NG_DOES_NOT_EXIST]
 	writeConst(*conn, Protocol::ANS_END);
 }
+
 void com_del_art(Connection* conn){
 	readConst(conn); // READ PAR_NUM
 	unsigned int ngrp = readSize(conn);
@@ -164,6 +177,7 @@ void com_del_art(Connection* conn){
 	writeConst(*conn, Protocol::ANS_END);
 	
 }
+
 void com_get_art(Connection* conn){
 	readConst(conn); // READ PAR_NUM
 	unsigned int ngrp = readSize(conn);
@@ -189,6 +203,9 @@ int main(int argc, char* argv[]) {
         cerr << "Server initialization error" << endl;
         exit(1);
     }
+
+	Data data();
+
     while (true) {
 		cout << "Waiting for activity.." << endl;
         Connection* conn = server.waitForActivity();
@@ -197,7 +214,7 @@ int main(int argc, char* argv[]) {
                 int nbr = readConst(conn);
 				cout << "Command received: " << nbr << endl;
                 switch (nbr){
-					case Protocol::COM_LIST_NG:		com_list_ng(conn); 		break;
+					case Protocol::COM_LIST_NG:		com_list_ng(conn, data); 		break;
 					case Protocol::COM_CREATE_NG:	com_create_ng(conn);	break;
 					case Protocol::COM_DELETE_NG:	com_del_ng(conn);		break;
 					case Protocol::COM_LIST_ART:	com_list_art(conn);		break;

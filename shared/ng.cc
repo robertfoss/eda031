@@ -3,7 +3,8 @@
 # include "ng.h"
 
 using namespace std;
-
+using data::Article;
+namespace data{
 Ng::Ng(const string& n, id_type ngId) {
 	created = getTimeString();
 	name = n;
@@ -56,4 +57,4 @@ string Ng::getTimeString() {
 bool operator==(const Ng& ng1, const Ng& ng2){
 	return ng1.id == ng2.id;
 }
-
+}
