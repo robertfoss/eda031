@@ -114,7 +114,6 @@ pair<int, Article> Data::getArt(id_type ngId, id_type artId){
 
 
 //}
-=======
 //	Article c(ss.str());
 //	stringstream ss2(stringstream::in | stringstream::out);
 //	c.toString(ss2);
