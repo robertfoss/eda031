@@ -7,6 +7,7 @@ namespace data{
 
 class Data {
 typedef unsigned int id_type;
+	friend int main();
 public:
 	Data();
 	std::map<id_type, Ng> allNgs();
@@ -17,9 +18,9 @@ public:
 	bool delArt(id_type ngId, id_type artId);
 	Article getArt(id_type ngId, id_type artId);
 	bool saveToFile();
+	std::map<id_type, Ng> ngs;
 private:
 	id_type latestNgId;
-	std::map<id_type, Ng> ngs;
 };
 
 }
