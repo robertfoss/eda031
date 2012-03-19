@@ -3,6 +3,9 @@
 
 using namespace std;
 typedef unsigned int id_type;
+using data::Article;
+using data::Ng;
+namespace data{
 
 Data::Data(){
 	
@@ -75,9 +78,10 @@ Article Data::getArt(id_type ngId, id_type artId){
 	}
 	return (*it2).second;
 }
+}
 
 int main() {
-	Data d;
+	/*Data d;
 
 	if(d.createNg("Gelicas ng")){
 		cout << "yay! I own the only ng ^^" << endl;
@@ -96,6 +100,7 @@ int main() {
 	}
 
 	Article a = d.getArt(1, 4);
-	cout << "id? " << a.id << endl;
+	cout << "id? " << a.id << endl;*/
 
 }
+

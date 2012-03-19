@@ -4,7 +4,7 @@
 # include "article.h"
 
 using namespace std;
-
+namespace data{
 Article::Article(const string& t, const string& a, const string& tx) {
 	created = getTimeString();
 	title = t;
@@ -49,4 +49,5 @@ string Article::getTimeString() {
 	}
 	ss << (locTime->tm_sec);
 	return ss.str();
+}
 }
