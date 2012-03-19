@@ -22,7 +22,6 @@ namespace data{
 		id_type latestNgId;
 		std::map<id_type, Ng> ngs;
 	};
-
 }
 
 #endif

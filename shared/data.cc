@@ -14,6 +14,10 @@ map<id_type, Ng> Data::allNgs(){
 	return ngs;
 }
 
+bool Data::saveToFile(){
+	return true;
+}
+
 int Data::createNg(const string& n){
 	++latestNgId;
 	for(map<id_type, Ng>::iterator it = ngs.begin(); it != ngs.end(); ++it){
@@ -100,7 +104,20 @@ pair<int, Article> Data::getArt(id_type ngId, id_type artId){
 	}
 
 	Article a = d.getArt(1, 4);
+	cout << "id? " << a.id << endl;
+	
+	stringstream ss(stringstream::in | stringstream::out);
+	Article b("aaaa  aa", "bbb  bb", "ccccc  cc", "dddd  dd", 123);
+	b.toString(ss);
+	cout << "B: " << ss.str() << endl;
 	cout << "id? " << a.id << endl;*/
 
-//}
 
+//}
+=======
+//	Article c(ss.str());
+//	stringstream ss2(stringstream::in | stringstream::out);
+//	c.toString(ss2);
+//	cout << "C: " << ss2.str();
+	
+}
