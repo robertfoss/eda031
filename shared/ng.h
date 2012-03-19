@@ -13,11 +13,11 @@ public:
 	Ng(const std::string& name, id_type id);
 	void newArt(data::Article& art);
 	id_type id;	//unique
+	std::string name;
 private:
 	id_type latestArtId;
 	std::string getTimeString();
 	std::string created;
-	std::string name;
 	std::map<id_type, data::Article> arts;
 };
 }

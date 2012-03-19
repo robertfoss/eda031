@@ -11,11 +11,14 @@ class Article {
 public:
 	Article(const std::string& name, const std::string& auth, const std::string& text);
 	id_type id; //unique in ng
+	std::string getTitle();
+	std::string getAuth();
+	std::string getText();
 private:
 	Article();
+	std::string title;
 	std::string created;
 	std::string getTimeString();
-	std::string title;
 	std::string auth;
 	std::string text;
 };

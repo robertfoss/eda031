@@ -8,79 +8,79 @@ using data::Ng;
 namespace data{
 
 Data::Data(){
-	
 }
 
 map<id_type, Ng> Data::allNgs(){
 	return ngs;
 }
 
-bool Data::createNg(const string& n){
+int Data::createNg(const string& n){
 	++latestNgId;
 	for(map<id_type, Ng>::iterator it = ngs.begin(); it != ngs.end(); ++it){
 		if((*it).second.name == n){ //the ngname alredy exists
-			return false;
+			return NO_NG;
 		}
 	}
 	Ng ng(n, latestNgId);
 	ngs.insert(make_pair(latestNgId, ng));
-	return true;
+	return OK;
 }
 
-bool Data::delNg(id_type ngId){
+int Data::delNg(id_type ngId){
 	if(ngs.erase(ngId) == 1){
-		return true;
+		return OK;
 	}
-	return false;
+	return NO_NG;
 }
 
-map<id_type, Article> Data::allArtsInNg(id_type ngId){
+pair<int, map<id_type, Article> > Data::allArtsInNg(id_type ngId){
 	map<id_type, Ng>::iterator it = ngs.find(ngId);
 	if(it == ngs.end()){ //Newsgroup doesn't exist
 		map<id_type, Article> m;
-		return m;
+		return make_pair(NO_NG, m);
 	}
-	return (*it).second.arts;
+	return make_pair(OK, (*it).second.arts);
 }
 
-bool Data::createArt(id_type ngId, const string& name, const string& auth, const string& text){
+int Data::createArt(id_type ngId, const string& name, const string& auth, const string& text){
 	map<id_type, Ng>::iterator it = ngs.find(ngId);
 	if(it == ngs.end()){ //Newsgroup doesn't exist
-		return false;
+		return NO_NG;
 	}
 	Article art(name, auth, text);
 	(*it).second.newArt(art);
-	return true;
+	return OK;
 }
 
-bool Data::delArt(id_type ngId, id_type artId){
+int Data::delArt(id_type ngId, id_type artId){
 	map<id_type, Ng>::iterator it = ngs.find(ngId);
-	if(it == ngs.end()){
-		return false;
+	if(it == ngs.end()){ //Newsgroup doesn't exist
+		return NO_NG;
 	}
 	if((*it).second.arts.erase(artId) == 1) {
-		return true;
+		return OK;
+	} else { //Article doesn't exist
+		return NO_ART;
 	}
-	return false;
 }
 
-Article Data::getArt(id_type ngId, id_type artId){
+pair<int, Article> Data::getArt(id_type ngId, id_type artId){
 	map<id_type, Ng>::iterator it = ngs.find(ngId);
 	if(it == ngs.end()){ //Newsgroup doesn't exist
 		Article a;
-		return a;
+		return make_pair(NO_NG, a);
 	}
 	Ng ng = (*it).second;
 	map<id_type, Article>::iterator it2 = ng.arts.find(artId);
 	if(it2 == ng.arts.end()){ //Article doesn't exist
 		Article a;
-		return a;
+		return make_pair(NO_ART, a);
 	}
-	return (*it2).second;
+	return make_pair(OK, (*it2).second);
 }
 }
 
-int main() {
+//int main() {
 	/*Data d;
 
 	if(d.createNg("Gelicas ng")){
@@ -102,5 +102,5 @@ int main() {
 	Article a = d.getArt(1, 4);
 	cout << "id? " << a.id << endl;*/
 
-}
+//}
 

@@ -16,6 +16,18 @@ Article::Article(){
 	id = 0;
 }
 
+string Article::getTitle(){
+	return title;
+}
+
+string Article::getAuth(){
+	return auth;
+}
+
+string Article::getText(){
+	return text;
+}
+
 string Article::getTimeString() {
 	time_t timer = time(0);
 	tm* locTime = localtime(&timer);
