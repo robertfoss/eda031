@@ -1,9 +1,9 @@
 /* myserver.cc: sample server program */
-#include "../clientserver/server.h"
-#include "../clientserver/protocol.h"
-#include "../clientserver/connection.h"
-#include "../clientserver/connectionclosedexception.h"
-#include "../clientserver/invalidstringexception.h"
+#include "basicServer.h"
+#include "../shared/protocol.h"
+#include "../shared/connection.h"
+#include "../shared/connectionclosedexception.h"
+#include "../shared/invalidstringexception.h"
 #include <iostream>
 #include <string>
 #include <cstdlib>

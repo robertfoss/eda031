@@ -1,6 +1,6 @@
-#include "../clientserver/connection.h"
+#include "../shared/connection.h"
 //#include "stringCmd.h"
-#include "../clientserver/protocol.h"
+#include "../shared/protocol.h"
 #include "getmessage.h"
 
 #include <iostream>

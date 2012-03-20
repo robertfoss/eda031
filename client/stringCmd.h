@@ -3,7 +3,7 @@
 
 #include <map>
 #include <string>
-#include "../clientserver/protocol.h"
+#include "../shared/protocol.h"
 
 
 class StringCmd {

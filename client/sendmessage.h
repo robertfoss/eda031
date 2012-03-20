@@ -1,9 +1,9 @@
 #ifndef SENDMESSAGE_H
 #define SENDMESSAGE_H
 
-#include "../clientserver/connection.h"
-#include "../clientserver/protocol.h"
-#include "../clientserver/connectionclosedexception.h"
+#include "../shared/connection.h"
+#include "../shared/protocol.h"
+#include "../shared/connectionclosedexception.h"
 
 #include <string>
 

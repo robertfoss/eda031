@@ -1,6 +1,6 @@
-#include "../clientserver/connection.h"
-#include "../clientserver/protocol.h"
-#include "../clientserver/connectionclosedexception.h"
+#include "../shared/connection.h"
+#include "../shared/protocol.h"
+#include "../shared/connectionclosedexception.h"
 #include "sendmessage.h"
 
 #include <iostream>

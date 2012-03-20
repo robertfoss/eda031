@@ -1,8 +1,8 @@
 /* myclient.cc: sample client program */
 
-#include "../clientserver/connection.h"
+#include "../shared/connection.h"
 //#include "stringCmd.h"
-#include "../clientserver/protocol.h"
+#include "../shared/protocol.h"
 #include "client.h"
 
 #include <iostream>

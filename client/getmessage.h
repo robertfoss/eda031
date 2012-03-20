@@ -1,9 +1,9 @@
 #ifndef GETMESSAGE_H
 #define GETMESSAGE_H
 
-#include "../clientserver/connection.h"
-#include "../clientserver/protocol.h"
-#include "../clientserver/invalidstringexception.h"
+#include "../shared/connection.h"
+#include "../shared/protocol.h"
+#include "../shared/invalidstringexception.h"
 #include <string>
 
 class GetMessage{

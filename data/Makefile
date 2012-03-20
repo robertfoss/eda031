@@ -14,20 +14,20 @@ SRC	= $(wildcard *.cc)
 
 .PHONY: all clean cleaner
 
-all: server
+all: data
 
 # Create the library; ranlib is for Darwin and maybe other systems.
 # Doesn't seem to do any damage on other systems.
 
-server: server.o ../shared/connection.o basicServer.o
+data:	data.o ng.o article.o
 	$(CXX) -o $@ $^
-
 
 clean:
 	$(RM) *.o
 
 cleaner: clean
 	$(RM) server
+	$(RM) ng
 	$(RM) *.d*
 
 %.d: %.cc
