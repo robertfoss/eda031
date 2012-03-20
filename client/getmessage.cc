@@ -110,7 +110,8 @@ void GetMessage::ansListArt(client_server::Connection& conn){
 				n = readNumber(conn);
 				for(int i = 0; i < n; ++i){
 					ch = conn.read(); // read PAR_NUM
-					cout << readNumber(conn) << "\t" << readString(conn) << endl;					
+				cout << readNumber(conn);				
+					cout << "\t" << readString(conn) << endl;
 				}
 				conn.read(); // read ANS_END
 			}
@@ -178,7 +179,9 @@ void GetMessage::ansGetArt(client_server::Connection& conn){
 			string title = readString(conn);
 			string author = readString(conn);
 			string content = readString(conn);
-			cout << title << " - " << author << endl;
+			cout << endl;
+			cout << title << " by " << author << endl;
+			cout << endl;
 			cout << content << endl;
 			conn.read(); // read ANS_END
 		}else if(ch == Protocol::ANS_NAK){

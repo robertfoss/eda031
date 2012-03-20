@@ -85,7 +85,7 @@ pair<int, Article> Data::getArt(id_type ngId, id_type artId){
 }
 }
 
-int main() {
+//int main() {
 /*
 	using namespace data;
 	Data d;
@@ -139,4 +139,4 @@ int main() {
 	c.toString(ss2);
 	cout << "C: " << ss2.str();
 	*/
-}
+//}

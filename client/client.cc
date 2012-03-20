@@ -29,7 +29,7 @@ void Client::printHelp(){
 	}
 }
 
-// TODO: Add COM_END and paramaters according to chap.6
+
 void Client::handleCommand(int nbr){	
 	switch(nbr){
 		case Protocol::COM_LIST_NG:					

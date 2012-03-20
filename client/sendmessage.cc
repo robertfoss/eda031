@@ -19,7 +19,6 @@ void SendMessage::writeNumber(int value, client_server::Connection& conn) throw(
     conn.write((value >> 16) & 0xFF);
     conn.write((value >> 8)  & 0xFF);
     conn.write(value & 0xFF);
-	cout << "writeNumber: " << (((value >> 24) & 0xFF) | ((value >> 16) & 0xFF) | ((value >> 8)  & 0xFF) | (value & 0xFF)) << endl;
 }
 
 void SendMessage::sendStringParameter(const string& s, client_server::Connection& conn){
