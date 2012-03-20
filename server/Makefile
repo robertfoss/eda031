@@ -19,15 +19,16 @@ all: server
 # Create the library; ranlib is for Darwin and maybe other systems.
 # Doesn't seem to do any damage on other systems.
 
-server: server.o ../shared/connection.o basicServer.o
-	$(CXX) -o $@ $^
 
+server: server.o ../shared/connection.o basicServer.o ../data/data.o ../data/ng.o ../data/article.o
+	$(CXX) -o $@ $^
 
 clean:
 	$(RM) *.o
 
 cleaner: clean
 	$(RM) server
+	$(RM) ng
 	$(RM) *.d*
 
 %.d: %.cc
