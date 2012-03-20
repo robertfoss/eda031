@@ -8,6 +8,7 @@ using data::Ng;
 namespace data{
 
 Data::Data(){
+	latestNgId = 0;
 }
 
 map<id_type, Ng> Data::allNgs(){
@@ -84,8 +85,10 @@ pair<int, Article> Data::getArt(id_type ngId, id_type artId){
 }
 }
 
-//int main() {
-	/*Data d;
+int main() {
+/*
+	using namespace data;
+	Data d;
 
 	if(d.createNg("Gelicas ng")){
 		cout << "yay! I own the only ng ^^" << endl;
@@ -97,26 +100,43 @@ pair<int, Article> Data::getArt(id_type ngId, id_type artId){
 	} else {
 		cout << "fuk art" << endl;
 	}
-
+	
 	map<id_type, Article> all = d.allArtsInNg(1);
 	for(map<id_type, Article>::iterator it = all.begin(); it != all.end(); ++it){
 		cout << "oj" << endl;
 	}
 
+
+	stringstream ss0(stringstream::in | stringstream::out);
+	cout << "Printing all newsgroups.." << endl;
+
+	for(map<id_type, Ng>::iterator it = d.ngs.begin(); it != d.ngs.end(); ++it){
+		it->second.toString(ss0);
+		cout << ss0.str();
+	}
+	//*/
+	/*
 	Article a = d.getArt(1, 4);
 	cout << "id? " << a.id << endl;
-	
+	*/
+	/*
+	Article a("111 11", "222 22", "3333 33", "4444 44", 123);
+
 	stringstream ss(stringstream::in | stringstream::out);
 	Article b("aaaa  aa", "bbb  bb", "ccccc  cc", "dddd  dd", 123);
 	b.toString(ss);
-	cout << "B: " << ss.str() << endl;
-	cout << "id? " << a.id << endl;*/
+	cout << "B: " << ss.str() << endl;*/
 
 
-//}
-//	Article c(ss.str());
+
+/*	Article c(ss.str());
 //	stringstream ss2(stringstream::in | stringstream::out);
 //	c.toString(ss2);
 //	cout << "C: " << ss2.str();
 	
+	Article c(ss.str());
+	stringstream ss2(stringstream::in | stringstream::out);
+	c.toString(ss2);
+	cout << "C: " << ss2.str();
+	*/
 }

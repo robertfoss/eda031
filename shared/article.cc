@@ -3,6 +3,14 @@
 #include <sstream>
 # include "article.h"
 
+
+//#define DEBUG_ARTICLE
+#ifdef DEBUG_ARTICLE
+#define trace cout
+#else
+#define trace if(false) cout
+#endif
+
 using namespace std;
 namespace data{
 Article::Article(const string& t, const string& a, const string& tx) {
@@ -21,22 +29,21 @@ Article::Article(const string& t, const string& a, const string& tx, const strin
 }
 
 Article::Article(const std::string& strs){
+	
 	stringstream iss(strs);
 	string str[4];
-	cout << "Parsing article..\n\"" << strs << "\"\n";
-	for(unsigned int i = 0; 0 < 4; ++i){
+	trace << "Parsing article..\n\"" << strs << "\"\n";
+	for(unsigned int i = 0; i < 4; ++i){
 		unsigned int len;
-		cout << "Wut, parsar snart." << endl;
 		iss >> len;
-		cout << "Length found: " << len << "..  " << endl;
+		trace << "Length found: " << len << "..  " << endl;
 		iss.ignore(1);
-		string snippet = "";
-
-		while (str[i].size() <= len){
-			iss >> snippet;
-			str[i] += snippet;
-			cout << "Snippet: " << snippet << endl;
-		}
+		
+		char* buffer = new char [len];
+		iss.read(buffer,len);
+		str[i] = string(buffer, len);
+		trace << "Parsed: " << str[i] << endl;
+		delete[] buffer;
 		iss.ignore(2);
 		
 	}
@@ -44,8 +51,8 @@ Article::Article(const std::string& strs){
 	title = str[1];
 	auth = str[2];
 	text = str[3];
+	iss >> id;
 	iss.ignore(1); // ignore last newline
-	//iss >> id;
 }
 
 std::stringstream&
@@ -55,6 +62,7 @@ Article::toString(std::stringstream& o){
 	o << auth.size() << " " << auth << "\t\t";
 	o << text.size() << " " << text << "\t\t";
 	o << id << "\t\t\n";
+	trace << "toString() == " << o.str();
 	return o;
 }
 
