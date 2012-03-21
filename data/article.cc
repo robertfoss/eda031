@@ -52,7 +52,7 @@ Article::Article(const std::string& strs){
 	auth = str[2];
 	text = str[3];
 	iss >> id;
-	iss.ignore(1); // ignore last newline
+	//iss.ignore(1); // ignore last newline
 }
 
 std::stringstream&
@@ -64,6 +64,13 @@ Article::toString(std::stringstream& o){
 	o << id << "\t\t\n";
 	trace << "toString() == " << o.str();
 	return o;
+}
+
+std::string
+Article::toRealString(){
+	stringstream ss(stringstream::in | stringstream::out);
+	Article::toString(ss);
+	return ss.str();
 }
 
 Article::Article(){

@@ -19,6 +19,7 @@ public:
 	std::string getTitle();
 	std::string getAuth();
 	std::string getText();
+	std::string toRealString();
 private:
 	Article();
 	std::string title;

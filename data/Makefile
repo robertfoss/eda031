@@ -3,7 +3,7 @@
 # connection.o and server.o
 #
 
-CXX		 = g++
+CXX		 = /usr/local/cs/cpp/bin/gfilt -banner:N  
 CXXFLAGS	 = -ggdb  -Wall -W -Werror -pedantic-errors
 CXXFLAGS	+= -Wmissing-braces -Wparentheses
 # The following option cannot be used since some of the socket

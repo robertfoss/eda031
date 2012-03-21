@@ -1,14 +1,17 @@
 #include <iostream>
 #include <ctime>
+#include <cstdio>
 #include <sstream>
 # include "ng.h"
 
-//#define DEBUG_NG
+#define DEBUG_NG
 #ifdef DEBUG_NG
 #define trace std::cout
 #else
 #define trace if(false) std::cout
 #endif
+
+#define MAX_ART_SIZE 5000
 
 using namespace std;
 using data::Article;
@@ -23,11 +26,12 @@ Ng::Ng(const string& n, id_type ngId) {
 }
 
 
-Ng::Ng(const std::string& strs){
-	stringstream iss(strs);
+Ng::Ng(std::stringstream& iss){
+	//stringstream iss(strs);
+	char* art_str = new char[MAX_ART_SIZE];
 	string str[4];
-	trace << "Parsing article..\n\"" << strs << "\"\n";
-	for(unsigned int i = 0; i < 4; ++i){
+	//trace << "Parsing article..\n\"" << strs << "\"\n";
+	for(unsigned int i = 0; i < 2; ++i){
 		unsigned int len;
 		iss >> len;
 		trace << "Length found: " << len << "..  " << endl;
@@ -44,9 +48,26 @@ Ng::Ng(const std::string& strs){
 	created = str[0];
 	name = str[1];
 	iss >> id;
-	iss.ignore(1); // ignore last newline
 
-	//peek next char, if tab then is article else is ng endif.
+	iss.ignore(3);
+
+	//iss.getline(art_str, MAX_ART_SIZE, '?');
+	//string s(art_str);
+	//cout << "Building article from string:\n\"" << s << "\"" << endl;
+
+	
+	printf("iss.peek(): %d - %c\n", iss.peek(),iss.peek());
+	while(iss.peek() == 9){
+		iss.ignore(1); //ignore \t
+		iss.getline(art_str, MAX_ART_SIZE);
+		string s(art_str);
+		cout << "Building article from string:\n\"" << s << "\"" << endl;
+		Article a(s);
+		cout << "Created art: " << a.toRealString() << endl;
+		arts.insert(make_pair(a.id, a));
+	}
+
+	//iss.ignore(1); // ignore last newline
 }
 
 std::stringstream&

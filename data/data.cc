@@ -1,4 +1,5 @@
 #include<iostream>
+#include <fstream>
 #include "data.h"
 
 using namespace std;
@@ -6,6 +7,9 @@ typedef unsigned int id_type;
 using data::Article;
 using data::Ng;
 namespace data{
+
+#define DBNAME "db.db.db"
+#define CHAR_BUF_SIZE 7000
 
 Data::Data(){
 	latestNgId = 0;
@@ -15,7 +19,34 @@ map<id_type, Ng> Data::allNgs(){
 	return ngs;
 }
 
-bool Data::saveToFile(){
+std::string
+Data::toString(){
+	map<id_type, Ng>::iterator it = ngs.begin();
+	map<id_type, Ng>::iterator end = ngs.end();
+	stringstream o(stringstream::in | stringstream::out);
+	for(; it != end; ++it){
+		(*it).second.toString(o);
+	}
+	string s = o.str();
+	return s;
+}
+
+void Data::saveToFile(){
+	ofstream of(DBNAME);
+	of << toString();
+	of.close();
+}
+
+bool Data::loadFromFile(){
+	ifstream ifs(DBNAME);
+	stringstream is;
+	is << ifs.rdbuf();
+
+
+	while(is.good()){
+		Ng ng(is);
+		ngs.insert(make_pair(ng.id, ng));
+	}
 	return true;
 }
 
@@ -85,8 +116,8 @@ pair<int, Article> Data::getArt(id_type ngId, id_type artId){
 }
 }
 
-//int main() {
-/*
+/*int main() {
+
 	using namespace data;
 	Data d;
 
@@ -100,13 +131,11 @@ pair<int, Article> Data::getArt(id_type ngId, id_type artId){
 	} else {
 		cout << "fuk art" << endl;
 	}
-	
-	map<id_type, Article> all = d.allArtsInNg(1);
-	for(map<id_type, Article>::iterator it = all.begin(); it != all.end(); ++it){
-		cout << "oj" << endl;
-	}
-
-
+	d.createArt(1, "d", "e", "f");
+	d.createNg("Group2");
+	d.createArt(2, "a", "b", "c");
+*/	
+/*
 	stringstream ss0(stringstream::in | stringstream::out);
 	cout << "Printing all newsgroups.." << endl;
 
@@ -114,19 +143,26 @@ pair<int, Article> Data::getArt(id_type ngId, id_type artId){
 		it->second.toString(ss0);
 		cout << ss0.str();
 	}
-	//*/
-	/*
+*/
+/*
+	d.saveToFile();
+	cout << "D1:\n" << d.toString();
+
+	Data d2;
+	d2.loadFromFile();
+	cout << "D2:\n" << d2.toString();
+
 	Article a = d.getArt(1, 4);
 	cout << "id? " << a.id << endl;
-	*/
-	/*
+*/
+/*
 	Article a("111 11", "222 22", "3333 33", "4444 44", 123);
 
 	stringstream ss(stringstream::in | stringstream::out);
 	Article b("aaaa  aa", "bbb  bb", "ccccc  cc", "dddd  dd", 123);
 	b.toString(ss);
-	cout << "B: " << ss.str() << endl;*/
-
+	cout << "B: " << ss.str() << endl;
+*/
 
 
 /*	Article c(ss.str());

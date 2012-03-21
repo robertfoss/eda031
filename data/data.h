@@ -19,8 +19,10 @@ public:
 	int createArt(id_type ngId, const std::string& name, const std::string& auth, const std::string& text);
 	int delArt(id_type ngId, id_type artId);
 	std::pair<int, Article> getArt(id_type ngId, id_type artId);
-	bool saveToFile();
+	void saveToFile();
+	bool loadFromFile();
 	std::map<id_type, Ng> ngs;
+	std::string toString();
 private:
 	id_type latestNgId;
 };

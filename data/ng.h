@@ -11,7 +11,7 @@ class Ng {
 	friend bool operator==(const data::Ng& ng1, const data::Ng& ng);
 public:
 	Ng(const std::string& name, id_type id);
-	Ng(const std::string& str);
+	Ng(std::stringstream& iss);
 	void newArt(data::Article& art);
 	std::stringstream& toString(std::stringstream& oss);
 	id_type id;	//unique

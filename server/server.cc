@@ -257,6 +257,7 @@ int main(int argc, char* argv[]) {
     }
 
 	Data data;
+	data.loadFromFile();
 
     while (true) {
 		cout << "Waiting for activity.." << endl;
@@ -275,6 +276,7 @@ int main(int argc, char* argv[]) {
 					case Protocol::COM_GET_ART:		com_get_art(conn, data);		break;
 					default:						wtf(conn, nbr);					break;
 				}
+				data.saveToFile();
             } catch (ConnectionClosedException&) {
                 server.deregisterConnection(conn);
                 delete conn;
