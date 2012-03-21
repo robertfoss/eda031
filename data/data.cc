@@ -3,80 +3,91 @@
 
 using namespace std;
 typedef unsigned int id_type;
+using data::Article;
+using data::Ng;
+namespace data{
 
 Data::Data(){
-	
+	latestNgId = 0;
 }
 
 map<id_type, Ng> Data::allNgs(){
 	return ngs;
 }
 
-bool Data::createNg(const string& n){
+bool Data::saveToFile(){
+	return true;
+}
+
+int Data::createNg(const string& n){
 	++latestNgId;
 	for(map<id_type, Ng>::iterator it = ngs.begin(); it != ngs.end(); ++it){
 		if((*it).second.name == n){ //the ngname alredy exists
-			return false;
+			return NO_NG;
 		}
 	}
 	Ng ng(n, latestNgId);
 	ngs.insert(make_pair(latestNgId, ng));
-	return true;
+	return OK;
 }
 
-bool Data::delNg(id_type ngId){
+int Data::delNg(id_type ngId){
 	if(ngs.erase(ngId) == 1){
-		return true;
+		return OK;
 	}
-	return false;
+	return NO_NG;
 }
 
-map<id_type, Article> Data::allArtsInNg(id_type ngId){
+pair<int, map<id_type, Article> > Data::allArtsInNg(id_type ngId){
 	map<id_type, Ng>::iterator it = ngs.find(ngId);
 	if(it == ngs.end()){ //Newsgroup doesn't exist
 		map<id_type, Article> m;
-		return m;
+		return make_pair(NO_NG, m);
 	}
-	return (*it).second.arts;
+	return make_pair(OK, (*it).second.arts);
 }
 
-bool Data::createArt(id_type ngId, const string& name, const string& auth, const string& text){
+int Data::createArt(id_type ngId, const string& name, const string& auth, const string& text){
 	map<id_type, Ng>::iterator it = ngs.find(ngId);
 	if(it == ngs.end()){ //Newsgroup doesn't exist
-		return false;
+		return NO_NG;
 	}
 	Article art(name, auth, text);
 	(*it).second.newArt(art);
-	return true;
+	return OK;
 }
 
-bool Data::delArt(id_type ngId, id_type artId){
+int Data::delArt(id_type ngId, id_type artId){
 	map<id_type, Ng>::iterator it = ngs.find(ngId);
-	if(it == ngs.end()){
-		return false;
+	if(it == ngs.end()){ //Newsgroup doesn't exist
+		return NO_NG;
 	}
 	if((*it).second.arts.erase(artId) == 1) {
-		return true;
+		return OK;
+	} else { //Article doesn't exist
+		return NO_ART;
 	}
-	return false;
 }
 
-Article Data::getArt(id_type ngId, id_type artId){
+pair<int, Article> Data::getArt(id_type ngId, id_type artId){
 	map<id_type, Ng>::iterator it = ngs.find(ngId);
 	if(it == ngs.end()){ //Newsgroup doesn't exist
 		Article a;
-		return a;
+		return make_pair(NO_NG, a);
 	}
 	Ng ng = (*it).second;
 	map<id_type, Article>::iterator it2 = ng.arts.find(artId);
 	if(it2 == ng.arts.end()){ //Article doesn't exist
 		Article a;
-		return a;
+		return make_pair(NO_ART, a);
 	}
-	return (*it2).second;
+	return make_pair(OK, (*it2).second);
+}
 }
 
-int main() {
+//int main() {
+/*
+	using namespace data;
 	Data d;
 
 	if(d.createNg("Gelicas ng")){
@@ -89,13 +100,43 @@ int main() {
 	} else {
 		cout << "fuk art" << endl;
 	}
-
+	
 	map<id_type, Article> all = d.allArtsInNg(1);
 	for(map<id_type, Article>::iterator it = all.begin(); it != all.end(); ++it){
 		cout << "oj" << endl;
 	}
 
+
+	stringstream ss0(stringstream::in | stringstream::out);
+	cout << "Printing all newsgroups.." << endl;
+
+	for(map<id_type, Ng>::iterator it = d.ngs.begin(); it != d.ngs.end(); ++it){
+		it->second.toString(ss0);
+		cout << ss0.str();
+	}
+	//*/
+	/*
 	Article a = d.getArt(1, 4);
 	cout << "id? " << a.id << endl;
+	*/
+	/*
+	Article a("111 11", "222 22", "3333 33", "4444 44", 123);
 
-}
+	stringstream ss(stringstream::in | stringstream::out);
+	Article b("aaaa  aa", "bbb  bb", "ccccc  cc", "dddd  dd", 123);
+	b.toString(ss);
+	cout << "B: " << ss.str() << endl;*/
+
+
+
+/*	Article c(ss.str());
+//	stringstream ss2(stringstream::in | stringstream::out);
+//	c.toString(ss2);
+//	cout << "C: " << ss2.str();
+	
+	Article c(ss.str());
+	stringstream ss2(stringstream::in | stringstream::out);
+	c.toString(ss2);
+	cout << "C: " << ss2.str();
+	*/
+//}
