@@ -43,6 +43,8 @@ all: $(PROGS)
 # myserver: myserver.o  
 client: client.o ../shared/connection.o sendmessage.o getmessage.o
 	$(CXX) -o $@ $^
+	mkdir -p ../bin
+	mv client ../bin
 
 # Standard clean and cleaner
 clean:
