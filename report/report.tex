@@ -1,0 +1,69 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb,amsmath}
+\usepackage{graphicx}
+\usepackage{sverb}
+\usepackage{float}
+\usepackage{verbatim}
+
+
+\title{EDA031 Programming Project | C++ Programming}
+\author{Dennis Andersen dt08da8@student.lth.se\\
+Andreas Nilsson dt08an7@student.lth.se\\
+Robert Foss dt08rf1@student.lth.se\\
+Angelica Gabasio dt08ag8@student.lth.se}
+\begin{document}
+\maketitle
+\newpage
+
+\section{Introduction}
+
+%A detailed description of your system design, both for the server and the clients. If you
+%know UML, use UML diagrams to give an overview of the design. (It is not necessary that
+%you list attributes and methods in these diagrams.) You must also describe the classes, at
+%least as far as stating the responsibilities of each class.
+%Also give an overview of the dynamics of the server, i.e., trace an interaction between a
+%client and the server from the point that the server receives a command until it sends the
+%reply. If you are well-versed in UML you may use sequence diagrams for this purpose.
+\section{System description}
+
+%You must also describe the classes, at
+%least as far as stating the responsibilities of each class.
+\subsection*{Data representation}
+The \verb!article! class represents an article, with title, author, article text, when the article was created and an article id. Each article belongs to one newsgroup, and the article id is unique for the newsgroup.
+
+A newsgroup is described by the \verb!ng! class with a unique id number, a name and a timestamp for when it was created. A newsgroup has a map containing all articles in it, and it keeps track of the latest article id in the group, since no id's should be reused.
+
+The \verb!data! class is the class that keeps track of all the newsgroups, and the latest used newsgroup id. When the server recieves a message, it sends it to the \verb!data! class. This class is responsible for updating the newsgroups and articles according to the message, and it also updates a file containing the database.
+
+%, trace an interaction between a
+%client and the server from the point that the server receives a command until it sends the
+%reply.
+\subsection*{Server}
+When the server recieves a message from the client, it reads the command and parameters according to the message protocol. The server then call the \verb!data! class with the right command and parameters.
+
+\verb!data! sends back an answer; OK if everything went as expected, NO\_NG if the newsgroup with the given id doesn't exist and NO\_ART if the article with the given id doesn't exist in the newsgroup.
+
+Depending on the answer from \verb!data!, the server either sends ANS\_ACK or ANS\_NACK according to the protocol.
+
+The persistent storage is implemented via a datastructure $\rightarrow$ text-database conversion. The database file db.db.db can be read and understood with a text editor.
+
+\subsubsection*{Structure}
+The server depends on the basicServer code for socket handling and lowlevel communication.
+It also shares some static data and structures with the client, which can be found in the shared folder.
+
+
+\subsection*{Client}
+The client is designed as a simple terminal-based application that uses text commands to execute its queries. When a user starts the client they specify the host and portnumber of the server to connect to. If they are successful they can begin typing commands.
+
+The client is seperated into 4 different classes. The main class \verb!client! starts the connection with the server and handles the input from the user. The input commands are checked in the class \verb!stringCmd! which contains a map converting supported commands into the enumerated values found in the shared protocol used. After the command has been converted the \verb!client! class analysis it and execute the corresponding communication to the server according to the protocol.
+
+These communication operations are seperated into two classes. One for sending messages, and one for receiving them, named \verb!sendmessage! and \verb!getmessage! respectively. Each of these classes contain a function for each supported command. The \verb!getmessage! class reads from the connection according to the protocol and handles any errors that might occur. Similary the \verb!sendmessage! class prompts the user for any additional information needed to complete the query, and writes it to the connection.
+
+
+\section{Conclusions}
+The project was relatively straight forward. The most difficult issues were posed by Makefiles and actually implementing the database. If we were to implement the db again, we would do it by simply storing every message ever sent by a client in a binary file.
+
+
+
+\end{document}
