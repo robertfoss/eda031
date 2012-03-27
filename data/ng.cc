@@ -4,7 +4,7 @@
 #include <sstream>
 # include "ng.h"
 
-#define DEBUG_NG
+//#define DEBUG_NG
 #ifdef DEBUG_NG
 #define trace std::cout
 #else
@@ -56,14 +56,13 @@ Ng::Ng(std::stringstream& iss){
 	//cout << "Building article from string:\n\"" << s << "\"" << endl;
 
 	
-	printf("iss.peek(): %d - %c\n", iss.peek(),iss.peek());
 	while(iss.peek() == 9){
 		iss.ignore(1); //ignore \t
 		iss.getline(art_str, MAX_ART_SIZE);
 		string s(art_str);
-		cout << "Building article from string:\n\"" << s << "\"" << endl;
+		trace << "Building article from string:\n\"" << s << "\"" << endl;
 		Article a(s);
-		cout << "Created art: " << a.toRealString() << endl;
+		trace << "Created art: " << a.toRealString() << endl;
 		arts.insert(make_pair(a.id, a));
 	}
 
