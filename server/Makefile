@@ -14,7 +14,9 @@ SRC	= $(wildcard *.cc)
 
 .PHONY: all clean cleaner
 
-all: server
+all: server 
+	rm server.o
+	make server-persistent
 
 # Create the library; ranlib is for Darwin and maybe other systems.
 # Doesn't seem to do any damage on other systems.
@@ -22,6 +24,14 @@ all: server
 
 server: server.o ../shared/connection.o basicServer.o ../data/data.o ../data/ng.o ../data/article.o
 	$(CXX) -o $@ $^
+	mkdir -p ../bin
+	mv $@ ../bin
+
+server-persistent: CXXFLAGS += -DPERSISTENT_STORAGE
+server-persistent: server.o ../shared/connection.o basicServer.o ../data/data.o ../data/ng.o ../data/article.o
+	$(CXX) $(CXXFLAGS) -o $@ $^
+	mkdir -p ../bin
+	mv $@ ../bin
 
 clean:
 	$(RM) *.o
@@ -31,10 +41,10 @@ cleaner: clean
 	$(RM) ng
 	$(RM) *.d*
 
-%.d: %.cc
-	@set -e; rm -f $@; \
-	 $(CXX) -MM $(CPPFLAGS) $< > $@.$$$$; \
-	 sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
-	 rm -f $@.$$$$
+#%.d: %.cc
+#	@set -e; rm -f $@; \
+#	 $(CXX) -MM $(CPPFLAGS) $< > $@.$$$$; \
+#	 sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
+#	 rm -f $@.$$$$
 
-include $(SRC:.cc=.d)
+#include $(SRC:.cc=.d)

@@ -66,13 +66,13 @@ void writeNumber(Connection& conn, int value) throw(ConnectionClosedException) {
     conn.write((value >> 16) & 0xFF);
     conn.write((value >> 8)  & 0xFF);
     conn.write(value & 0xFF);
-	cout << "writeNumber: " << (((value >> 24) & 0xFF) | ((value >> 16) & 0xFF) | ((value >> 8)  & 0xFF) | (value & 0xFF)) << endl;
+	//cout << "writeNumber: " << (((value >> 24) & 0xFF) | ((value >> 16) & 0xFF) | ((value >> 8)  & 0xFF) | (value & 0xFF)) << endl;
 }
 
 /** Send one byte constant. */
 void writeConst(Connection& conn, int value) throw(ConnectionClosedException) {
     conn.write((value & 0xFF));
-	cout << "writeConst: " << (value & 0xFF) << endl;
+	//cout << "writeConst: " << (value & 0xFF) << endl;
 }
 
 /** Write string an corresponding string length N before. */
@@ -257,7 +257,12 @@ int main(int argc, char* argv[]) {
     }
 
 	Data data;
+#ifdef PERSISTENT_STORAGE
+	cout << "Persistent storage enabled." << endl;
 	data.loadFromFile();
+#else
+	cout << "Persistent storage not enbaled." << endl;
+#endif
 
     while (true) {
 		cout << "Waiting for activity.." << endl;
@@ -276,7 +281,9 @@ int main(int argc, char* argv[]) {
 					case Protocol::COM_GET_ART:		com_get_art(conn, data);		break;
 					default:						wtf(conn, nbr);					break;
 				}
+#ifdef PERSISTENT_STORAGE
 				data.saveToFile();
+#endif
             } catch (ConnectionClosedException&) {
                 server.deregisterConnection(conn);
                 delete conn;
