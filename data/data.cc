@@ -24,6 +24,7 @@ Data::toString(){
 	map<id_type, Ng>::iterator it = ngs.begin();
 	map<id_type, Ng>::iterator end = ngs.end();
 	stringstream o(stringstream::in | stringstream::out);
+	o << latestNgId << endl;
 	for(; it != end; ++it){
 		(*it).second.toString(o);
 	}
@@ -41,7 +42,7 @@ bool Data::loadFromFile(){
 	ifstream ifs(DBNAME);
 	stringstream is;
 	is << ifs.rdbuf();
-
+	is >> latestNgId;
 
 	while(is.good()){
 		Ng ng(is);
