@@ -7,3 +7,9 @@ In this project, you shall develop your own news system, consisting of a news se
 a news client. Both programs shall be written in C++. The server is dedicated and does not
 share news with other servers. Instead of NNTP, you will use the communication protocol that is
 defined in section 6.
+
+
+För att kompilera och köra nyhetsservern:
+Kör makefilen från terminalen genom att skriva make. Då skapas bin-mappen innehållandes klient, server och server-persistent.
+Servern startas genom ./server portnummer eller ./server-persistent portnummer. Klienten startas genom ./client hastname portnummer.
+För att få reda på vilka kommandon som stöds i klienten skriver man help, och får då upp en lista med kommandon. Sedan skriver man det kommando man vill utföra, och avslutar med "exit" när man är klar.
