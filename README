@@ -1,4 +1,4 @@
 För att kompilera och köra nyhetsservern:
 Kör makefilen från terminalen genom att skriva make. Då skapas bin-mappen innehållandes klient, server och server-persistent.
-Servern startas genom ./server portnummer eller ./server-persistent portnummer. Klienten startas genom ./client hastname portnummer.
+Servern startas genom ./server portnummer eller ./server-persistent portnummer. Klienten startas genom ./client hostname portnummer.
 För att få reda på vilka kommandon som stöds i klienten skriver man help, och får då upp en lista med kommandon. Sedan skriver man det kommando man vill utföra, och avslutar med "exit" när man är klar.
