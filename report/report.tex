@@ -38,7 +38,7 @@ The \verb!data! class is the class that keeps track of all the newsgroups, and t
 %client and the server from the point that the server receives a command until it sends the
 %reply.
 \subsection*{Server}
-When the server recieves a message from the client, it reads the command and parameters according to the message protocol. The server then call the \verb!data! class with the right command and parameters.
+When the \verb!server! class recieves a message from the client, it reads the command and parameters according to the message protocol. The server then call the \verb!data! class with the right command and parameters.
 
 \verb!data! sends back an answer; OK if everything went as expected, NO\_NG if the newsgroup with the given id doesn't exist and NO\_ART if the article with the given id doesn't exist in the newsgroup.
 
@@ -47,7 +47,7 @@ Depending on the answer from \verb!data!, the server either sends ANS\_ACK or AN
 The persistent storage is implemented via a datastructure $\rightarrow$ text-database conversion. The database file db.db.db can be read and understood with a text editor.
 
 \subsubsection*{Structure}
-The server depends on the basicServer code for socket handling and lowlevel communication.
+The server depends on the \verb!basicServer! code for socket handling and lowlevel communication.
 It also shares some static data and structures with the client, which can be found in the shared folder.
 
 
@@ -58,6 +58,36 @@ The client is seperated into 4 different classes. The main class \verb!client! s
 
 These communication operations are seperated into two classes. One for sending messages, and one for receiving them, named \verb!sendmessage! and \verb!getmessage! respectively. Each of these classes contain a function for each supported command. The \verb!getmessage! class reads from the connection according to the protocol and handles any errors that might occur. Similary the \verb!sendmessage! class prompts the user for any additional information needed to complete the query, and writes it to the connection.
 
+\section*{Class list}
+
+\begin{description}
+  \item[/data/] Contains classes describing different kinds of data used to represent a usenet database.
+  \begin{description}
+    \item[Data] Represents multiple newsgroups with {\bf Ng}.
+    \item[Ng] Represents the contents of a newsgroup with {\bf Article}.
+    \item[Article] Represents and article and associated meta information.
+  \end{description}
+  \item[/server/] Contains a class describing a generic TCP server.
+  \begin{description}
+    \item[Server] Implements a generic TCP server.
+  \end{description}
+  \item[/client/] Contains classes implementing a usenet client.
+  \begin{description}
+    \item[SendMessage] Implements helper functions for each usenet message.
+    \item[Client] Handles sending and receiving messages and a text ui.
+    \item[StringCmd] Implements a helper function handling user input.
+  \end{description}
+  \item[/shared/] Contains a classes shared between the client and server.
+  \begin{description}
+    \item[Connection] Represents a connection between a client and a server.
+  \end{description}
+\end{description}
+
+\section*{Alternative database implementation}
+Instead of using defines and multiple binaries an alternative solution would be using interfaces.
+An interface is implemented by creating a class that will act as an interface and declaring interface functions in that class as abstract with \verb'virtual void OverrideMe() = 0;'.
+
+A possible benefit would be choosing database backend at runtime.
 
 \section{Conclusions}
 The project was relatively straight forward. The most difficult issues were posed by Makefiles and actually implementing the database. If we were to implement the db again, we would do it by simply storing every message ever sent by a client in a binary file.
